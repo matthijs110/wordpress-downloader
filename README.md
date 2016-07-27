@@ -8,4 +8,4 @@ This project is a work in progress. It does work, but needs some improvements.
 - [ ] Code improvements
 - [ ] Optional argument to specify the WordPress version
 - [ ] Error handling (show stack trace)
-- [ ] Show progress bar for each process (not sure if this is possible)
+- [ ] Show [progress bar](http://symfony.com/doc/current/components/console/helpers/progressbar.html) for each process (not sure if this is possible)
