@@ -13,7 +13,7 @@ class InstallCommand extends Command
          */
 
         $this->setName('install')
-             ->setDescription('Install the latest version of WordPress.'); // ./wordpress install
+             ->setDescription('Install the latest version of WordPress.'); // wordpress install
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
