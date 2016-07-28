@@ -9,6 +9,11 @@ use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
+    /**
+     * Configure the command.
+     *
+     * @return void
+     */
     protected function configure()
     {
         /**
@@ -19,14 +24,17 @@ class InstallCommand extends Command
              ->setDescription('Install the latest version of WordPress.');
     }
 
+    /**
+     * Execute the command.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (
-            file_exists($_SERVER["PWD"].'/wp-config-sample.php') || 
-            file_exists($_SERVER["PWD"].'/wp-config.php')
-        ) {
-            throw new RuntimeException('WordPress installation found in this directory.');
-        }
+        $this->checkForExistingWordPressInstallation();
              
         $output->writeLn('<info>Downloading the WordPress files...</info>');
         
@@ -37,6 +45,7 @@ class InstallCommand extends Command
         ];
 
         $process = new Process(implode(' && ', $commands));
+
         $process->run(function ($type, $line) use ($output) {
             $output->write($line);
         });
@@ -47,6 +56,21 @@ class InstallCommand extends Command
          
         // Return feedback messages.
         return $output->writeLn('<comment>A fresh WordPress installation has been served!</comment>');
+    }
+
+    /**
+     * Check if a WordPress installtion exists already.
+     *
+     * @return mixed
+     */
+    private function checkForExistingWordPressInstallation()
+    {
+        if (
+            file_exists($_SERVER["PWD"].'/wp-config-sample.php') || 
+            file_exists($_SERVER["PWD"].'/wp-config.php')
+        ) {
+            throw new RuntimeException('WordPress installation found in this directory.');
+        }
     }
 
 }
