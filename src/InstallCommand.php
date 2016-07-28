@@ -50,7 +50,7 @@ class InstallCommand extends Command
             $output->write($line);
         });
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
          
