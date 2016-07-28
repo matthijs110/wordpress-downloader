@@ -1,8 +1,11 @@
 <?php
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -13,47 +16,37 @@ class InstallCommand extends Command
          */
 
         $this->setName('install')
-             ->setDescription('Install the latest version of WordPress.'); // wordpress install
+             ->setDescription('Install the latest version of WordPress.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Check if a Wordpress installation exists.
         if (
             file_exists($_SERVER["PWD"].'/wp-config-sample.php') || 
             file_exists($_SERVER["PWD"].'/wp-config.php')
         ) {
-            return $output->writeLn('<error>WordPress installation found in this directory.</error>');
-        } else {
-            $output->writeLn('WordPress installation DOES NOT exists.');
+            throw new RuntimeException('WordPress installation found in this directory.');
         }
+             
+        $output->writeLn('<info>Downloading the WordPress files...</info>');
         
-        // Execute a wget command to install the latest version of WordPress.
-        
-        $output->writeLn('<info>Downloading the WordPress files..</info>');
-        exec("wget https://wordpress.org/latest.tar.gz 2>&1", $response, $return);
-        if ($return) {
-            $output->writeLn('<error>Something went wrong while downloading the WordPress files.</error>');
-            
-            foreach($response as $message) {
-                $output->writeLn($message);
-            }
-            return;
-        }
+        $commands = [
+            'curl -o latest.tar.gz https://wordpress.org/latest.tar.gz --progress-bar',
+            'tar xfz latest.tar.gz --strip-components=1',
+            'rm -f latest.tar.gz',
+        ];
 
-        $output->writeLn('<info>Extracting the WordPress files..</info>');
-        exec("tar xfz latest.tar.gz --strip-components=1") || ! exec("rm -f latest.tar.gz", $response, $return);
-        if ($return) {
-            $output->writeLn('<error>Something went wrong while extracting the WordPress files.</error>');
+        $process = new Process(implode(' && ', $commands));
+        $process->run(function ($type, $line) use ($output) {
+            $output->write($line);
+        });
 
-            foreach($response as $message) {
-                $output->writeLn($message);
-            }
-            return;
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
         }
-        
+         
         // Return feedback messages.
-        return $output->writeLn('<info>A fresh WordPress installation has been served!</info>');
+        return $output->writeLn('<comment>A fresh WordPress installation has been served!</comment>');
     }
 
 }
