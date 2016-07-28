@@ -55,7 +55,8 @@ class InstallCommand extends Command
         }
          
         // Return feedback messages.
-        return $output->writeLn('<comment>A fresh WordPress installation has been served!</comment>');
+        $output->writeLn('<comment>A fresh WordPress installation has been served!</comment>');
+        $output->writeLn('<info>Visit your installation directory to configure WordPress.</info>');
     }
 
     /**
