@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,9 +37,9 @@ class InstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->checkForExistingWordPressInstallation();
-             
+
         $output->writeLn('<info>Downloading the WordPress files...</info>');
-        
+
         $commands = [
             'curl -o latest.tar.gz https://wordpress.org/latest.tar.gz --progress-bar',
             'tar xfz latest.tar.gz --strip-components=1',
@@ -53,7 +55,7 @@ class InstallCommand extends Command
         if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-         
+
         // Return feedback messages.
         $output->writeLn('<comment>A fresh WordPress installation has been served!</comment>');
         $output->writeLn('<info>Visit your installation directory to configure WordPress.</info>');
@@ -66,12 +68,10 @@ class InstallCommand extends Command
      */
     private function checkForExistingWordPressInstallation()
     {
-        if (
-            file_exists($_SERVER["PWD"].'/wp-config-sample.php') || 
+        if (file_exists($_SERVER["PWD"].'/wp-config-sample.php') ||
             file_exists($_SERVER["PWD"].'/wp-config.php')
         ) {
             throw new RuntimeException('WordPress installation found in this directory.');
         }
     }
-
 }
