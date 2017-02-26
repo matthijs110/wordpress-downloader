@@ -9,15 +9,18 @@ $ php wordpress install [options]
 * Composer
 
 ### Installation
-TODO
+Install this package globally
+```sh
+$ composer global require matthijs110/wordpress-installer
+```
 
 ### Usage
 **Download the latest version**
 ```sh
-$ php wordpress install
+$ wordpress install
 ```
 
 **Specify a specific version**
 ```sh
-$ php wordpress install --release=4.7
+$ wordpress install --release=4.7
 ```
