@@ -2,7 +2,7 @@
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\{InputOption, InputInterface};
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -16,12 +16,9 @@ class InstallCommand extends Command
      */
     protected function configure()
     {
-        /**
-         * TODO: Version specific installation (Argument).
-         */
-
         $this->setName('install')
-             ->setDescription('Install the latest version of WordPress.');
+             ->setDescription('Install the latest release of WordPress.')
+             ->addOption('release', 'r', InputOption::VALUE_REQUIRED, 'Specify the version of WordPress', 'latest');
     }
 
     /**
@@ -36,15 +33,24 @@ class InstallCommand extends Command
     {
         $this->checkForExistingWordPressInstallation();
 
-        $output->writeLn('<info>Downloading the WordPress files...</info>');
+        $release = trim($input->getOption('release'), "=");
+        $file = "wordpress-$release";
+
+        $url = "https://wordpress.org/${file}.tar.gz";
+        if (! $this->isValidUrl($url)) {
+            throw new RuntimeException("Version ${release} does not exist.");
+        }
+
+        $version = explode("-", $file)[1];
+        $output->writeLn("<info>Downloading and extracting WordPress ${version}...</info>");
 
         $commands = [
-            'curl -o latest.tar.gz https://wordpress.org/latest.tar.gz --progress-bar',
-            'tar xfz latest.tar.gz --strip-components=1',
-            'rm -f latest.tar.gz',
+            "curl -o wordpress.tar.gz ${url} --progress-bar",
+            "tar xfz wordpress.tar.gz --strip-components=1",
+            "rm -f wordpress.tar.gz",
         ];
 
-        $process = new Process(implode(' && ', $commands));
+        $process = new Process(implode(" && ", $commands));
 
         $process->run(function ($type, $line) use ($output) {
             $output->write($line);
@@ -55,21 +61,31 @@ class InstallCommand extends Command
         }
 
         // Return feedback messages.
-        $output->writeLn('<comment>A fresh WordPress installation has been served!</comment>');
-        $output->writeLn('<info>Visit your installation directory to configure WordPress.</info>');
+        $output->writeLn("<comment>A fresh WordPress installation has been downloaded and unpacked!</comment>");
+        $output->writeLn("<info>Visit your URL to configure WordPress.</info>");
     }
 
     /**
-     * Check if a WordPress installtion exists already.
+     * Check if the current directory contains a WordPress installation.
      *
      * @return mixed
      */
     private function checkForExistingWordPressInstallation()
     {
-        if (file_exists($_SERVER["PWD"].'/wp-config-sample.php') ||
-            file_exists($_SERVER["PWD"].'/wp-config.php')
-        ) {
-            throw new RuntimeException('WordPress installation found in this directory.');
+        if (file_exists($_SERVER["PWD"]."/wp-settings.php")) {
+            throw new RuntimeException("WordPress installation found in this directory.");
         }
+    }
+
+    /**
+     * Checks weather the URL exists.
+     *
+     * @param  string  $url The URL to check.
+     * @return boolean
+     */
+    function isValidUrl($url)
+    {
+        $headers = get_headers($url);
+        return stripos($headers[0], "200 OK");
     }
 }
