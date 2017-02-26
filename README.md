@@ -1,12 +1,12 @@
 # WordPress Installer (Console)
-Symfony console application that will serve a fresh WordPress installation.
+Symfony console application that will serve a fresh [WordPress](https://wordpress.org/) installation.
 ```sh
 $ php wordpress install [options]
 ```
 
 ### Requirements
 * PHP 7
-* Composer
+* [Composer](https://getcomposer.org/)
 
 ### Installation
 Install this package globally
