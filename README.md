@@ -1,10 +1,23 @@
 # WordPress installer (Console)
 Symfony console application that will serve a fresh WordPress installation.
+```sh
+$ php wordpress install [options]
+```
 
-## Alpha
-This project is a work in progress. It does work, but needs some improvements.
+### Requirements
+* PHP 7
+* Composer
 
-## Todo
-- [ ] Optional argument to specify the WordPress version
-- [ ] Error handling (show stack trace)
-- [X] Show [progress bar](http://symfony.com/doc/current/components/console/helpers/progressbar.html) for each process (not sure if this is possible)
+### Installation
+TODO
+
+### Usage
+**Download the latest version**
+```sh
+$ php wordpress install
+```
+
+**Specify a specific version**
+```sh
+$ php wordpress install -release=4.7
+```
