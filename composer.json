@@ -1,4 +1,15 @@
 {
+    "name": "matthijs110/wordpress-downloader",
+    "description": "Grab WordPress the fast way",
+    "keywords": ["wordpress"],
+    "version": "v1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "matthijs110",
+            "email": "msin2@me.com"
+        }
+    ],
     "require": {
         "symfony/console": "^3.1",
         "symfony/process": "^3.1"

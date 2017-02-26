@@ -1,4 +1,4 @@
-# WordPress installer (Console)
+# WordPress Installer (Console)
 Symfony console application that will serve a fresh WordPress installation.
 ```sh
 $ php wordpress install [options]
@@ -19,5 +19,5 @@ $ php wordpress install
 
 **Specify a specific version**
 ```sh
-$ php wordpress install -release=4.7
+$ php wordpress install --release=4.7
 ```
