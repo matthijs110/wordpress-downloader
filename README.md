@@ -3,7 +3,7 @@
     <a href="https://packagist.org/packages/matthijs110/wordpress-downloader"><img src="https://poser.pugx.org/matthijs110/wordpress-downloader/v/stable.svg" alt="Latest Stable Version"></a>
     <a href="https://packagist.org/packages/matthijs110/wordpress-downloader"><img src="https://poser.pugx.org/matthijs110/wordpress-downloader/license.svg" alt="License"></a>
 </p>
-# WordPress Installer (Console)
+# WordPress Downloader (Console)
 Symfony console application that will serve a fresh [WordPress](https://wordpress.org/) installation.
 ```sh
 $ php wordpress install [options]
@@ -18,7 +18,7 @@ $ php wordpress install [options]
 ### Installation
 Install this package globally
 ```sh
-$ composer global require matthijs110/wordpress-installer
+$ composer global require matthijs110/wordpress-downloader
 ```
 
 ### Usage
