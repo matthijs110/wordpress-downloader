@@ -17,7 +17,7 @@ class InstallCommand extends Command
     protected function configure()
     {
         $this->setName('install')
-             ->setDescription('Install the latest release of WordPress.')
+             ->setDescription('Download the latest release of WordPress.')
              ->addOption('release', 'r', InputOption::VALUE_REQUIRED, 'Specify the version of WordPress', 'latest');
     }
 
@@ -31,6 +31,7 @@ class InstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->checkForCurlInstallation();
         $this->checkForExistingWordPressInstallation();
 
         $release = trim($input->getOption('release'), "=");
@@ -75,6 +76,19 @@ class InstallCommand extends Command
         if (file_exists(getcwd()."/wp-settings.php")) {
             throw new RuntimeException("WordPress installation found in this directory.");
         }
+    }
+
+    /**
+     * Check if cURL is installed.
+     * 
+     * @return mixed
+     */
+    protected function checkForCurlInstallation()
+    {
+        if (! `which curl`) {
+            throw new RuntimeException("The required cURL command was not found.");
+        }
+        return true;
     }
 
     /**
