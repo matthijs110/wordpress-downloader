@@ -12,6 +12,8 @@ $ php wordpress install [options]
 ### Requirements
 * PHP 7
 * [Composer](https://getcomposer.org/)
+* [cURL](https://curl.haxx.se/docs/manpage.html)
+* A shell terminal (Windows)
 
 ### Installation
 Install this package globally
@@ -20,12 +22,18 @@ $ composer global require matthijs110/wordpress-installer
 ```
 
 ### Usage
-**Download the latest version**
+Download the latest version
 ```sh
 $ wordpress install
 ```
 
-**Specify a specific version**
+Specify a specific version
 ```sh
 $ wordpress install --release=4.7
+```
+
+#### Windows users
+Prepend PHP before each command
+```sh
+$ php wordpress
 ```
