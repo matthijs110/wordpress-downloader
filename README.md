@@ -4,9 +4,9 @@
     <a href="https://packagist.org/packages/matthijs110/wordpress-downloader"><img src="https://poser.pugx.org/matthijs110/wordpress-downloader/license.svg" alt="License"></a>
 </p>
 # WordPress Downloader (Console)
-Symfony console application that will serve a fresh [WordPress](https://wordpress.org/) installation.
+Symfony console application that will grab a fresh [WordPress](https://wordpress.org/) installation.
 ```sh
-$ php wordpress install [options]
+$ wordpress install [options]
 ```
 
 ### Requirements
@@ -26,7 +26,7 @@ Download the latest version
 $ wordpress install
 ```
 
-Specify a specific version
+Specify a specific version (e.g. 4.7)
 ```sh
 $ wordpress install --release=4.7
 ```
