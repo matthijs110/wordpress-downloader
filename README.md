@@ -13,7 +13,7 @@ $ php wordpress install [options]
 * PHP 7
 * [Composer](https://getcomposer.org/)
 * [cURL](https://curl.haxx.se/docs/manpage.html)
-* A shell terminal (Windows)
+* macOS or Ubuntu
 
 ### Installation
 Install this package globally
