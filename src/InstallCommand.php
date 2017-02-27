@@ -1,14 +1,21 @@
 <?php
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\{InputOption, InputInterface};
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
+    /**
+     * The file to download.
+     *
+     * @var string
+     */
+    protected $file;
+
     /**
      * Configure the command.
      *
@@ -31,35 +38,16 @@ class InstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->checkForCurlInstallation();
+        // Check for ZipArchive and an existing WordPress installation.
+        $this->checkForZipArchive();
         $this->checkForExistingWordPressInstallation();
 
+        // Get the right release.
         $release = trim($input->getOption('release'), "=");
-        $file = "wordpress-$release";
+        $this->file = "wordpress-$release.zip";
 
-        $url = "https://wordpress.org/${file}.tar.gz";
-        if (! $this->isValidUrl($url)) {
-            throw new RuntimeException("Version ${release} does not exist.");
-        }
-
-        $version = explode("-", $file)[1];
-        $output->writeLn("<info>Downloading and extracting WordPress ${version}...</info>");
-
-        $commands = [
-            "curl -o wordpress.tar.gz ${url} --progress-bar",
-            "tar xfz wordpress.tar.gz --strip-components=1",
-            "rm -f wordpress.tar.gz",
-        ];
-
-        $process = new Process(implode(" && ", $commands));
-
-        $process->run(function ($type, $line) use ($output) {
-            $output->write($line);
-        });
-
-        if (! $process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+        // Download and unpack WordPress.
+        $this->download($output)->unpack($output);
 
         // Return feedback messages.
         $output->writeLn("<comment>A fresh WordPress installation has been downloaded and unpacked!</comment>");
@@ -73,33 +61,73 @@ class InstallCommand extends Command
      */
     protected function checkForExistingWordPressInstallation()
     {
-        if (file_exists(getcwd()."/wp-settings.php")) {
+        if (file_exists(getcwd()."/wordpress/wp-settings.php")) {
             throw new RuntimeException("WordPress installation found in this directory.");
         }
-    }
 
-    /**
-     * Check if cURL is installed.
-     *
-     * @return mixed
-     */
-    protected function checkForCurlInstallation()
-    {
-        if (! `curl --version`) {
-            throw new RuntimeException("The required cURL command was not found.");
-        }
         return true;
     }
 
     /**
-     * Checks weather the URL exists.
+     * Check if the ZipArchive PHP extension is installed.
      *
-     * @param  string  $url The URL to check.
-     * @return boolean
+     * @return mixed
      */
-    protected function isValidUrl($url)
+    protected function checkForZipArchive()
     {
-        $headers = get_headers($url);
-        return stripos($headers[0], "200 OK");
+        if (! class_exists("ZipArchive")) {
+            throw new RuntimeException("Please install the Zip PHP extension.");
+        }
+
+        return true;
     }
+
+    /**
+     * Download the Zip from WordPress.
+     *
+     * @return $this
+     */
+    protected function download(OutputInterface $output)
+    {
+        $version = explode(".zip", explode("-", $this->file)[1])[0];
+        $output->writeLn("<info>Downloading WordPress ${version}...</info>");
+
+        try {
+            $response = (new Client)->get("https://wordpress.org/".$this->file);
+
+            file_put_contents($this->file, $response->getBody());
+        } catch (ClientException $ex) {
+            throw new RuntimeException("Version ${version} does not exist.");
+        }
+
+        return $this;
+    }
+
+    /**
+     * Extract the Zip file.
+     *
+     * @return $this
+     */
+    protected function unpack(OutputInterface $output)
+    {
+        $output->writeLn("<info>Unpacking WordPress...</info>");
+        $archive = new ZipArchive;
+
+        // Open the archive.
+        $archive->open($this->file);
+
+        // Extract the content to the current working directory.
+        $archive->extractTo(getcwd());
+
+        // Close the archive.
+        $archive->close();
+
+        // Delete the zip file.
+        $output->writeln('');
+        $output->writeLn("<info>Cleaning up...</info>");
+        @unlink($this->file);
+
+        return $this;
+   }
+
 }

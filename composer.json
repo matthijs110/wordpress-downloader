@@ -2,12 +2,13 @@
     "name": "matthijs110/wordpress-downloader",
     "description": "Grab WordPress the fast way",
     "keywords": ["wordpress"],
-    "version": "v1.0.3",
+    "version": "v1.1.0",
     "license": "MIT",
     "author": "matthijs110",
     "require": {
         "symfony/console": "^3.1",
-        "symfony/process": "^3.1"
+        "symfony/process": "^3.1",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "autoload": {
         "psr-4": {
