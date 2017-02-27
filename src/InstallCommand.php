@@ -123,8 +123,8 @@ class InstallCommand extends Command
         $archive->close();
 
         // Delete the zip file.
-        $output->writeln('');
         $output->writeLn("<info>Cleaning up...</info>");
+        $output->writeln('');
         @unlink($this->file);
 
         return $this;

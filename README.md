@@ -11,9 +11,8 @@ $ php wordpress install [options]
 
 ### Requirements
 * PHP 7
+* PHP [ZipArchive](http://php.net/manual/en/class.ziparchive.php)
 * [Composer](https://getcomposer.org/)
-* [cURL](https://curl.haxx.se/docs/manpage.html)
-* macOS or Ubuntu
 
 ### Installation
 Install this package globally
