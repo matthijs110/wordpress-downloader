@@ -5,7 +5,7 @@ require __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
-$app = new Application('WordPress downloader', '1.0.1');
+$app = new Application('WordPress Downloader', '1.0.1');
 
 $app->add(new InstallCommand);
 
