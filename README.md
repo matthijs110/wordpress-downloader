@@ -31,9 +31,3 @@ Specify a specific version
 ```sh
 $ wordpress install --release=4.7
 ```
-
-#### Windows users
-Prepend PHP before each command
-```sh
-$ php wordpress
-```
