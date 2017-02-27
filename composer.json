@@ -2,7 +2,7 @@
     "name": "matthijs110/wordpress-downloader",
     "description": "Grab WordPress the fast way",
     "keywords": ["wordpress"],
-    "version": "v1.0.2",
+    "version": "v1.0.3",
     "license": "MIT",
     "author": "matthijs110",
     "require": {

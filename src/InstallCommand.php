@@ -80,12 +80,12 @@ class InstallCommand extends Command
 
     /**
      * Check if cURL is installed.
-     * 
+     *
      * @return mixed
      */
     protected function checkForCurlInstallation()
     {
-        if (! `which curl`) {
+        if (! `curl --version`) {
             throw new RuntimeException("The required cURL command was not found.");
         }
         return true;
