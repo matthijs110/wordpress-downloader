@@ -70,9 +70,9 @@ class InstallCommand extends Command
      *
      * @return mixed
      */
-    private function checkForExistingWordPressInstallation()
+    protected function checkForExistingWordPressInstallation()
     {
-        if (file_exists($_SERVER["PWD"]."/wp-settings.php")) {
+        if (file_exists(getcwd()."/wp-settings.php")) {
             throw new RuntimeException("WordPress installation found in this directory.");
         }
     }
@@ -83,7 +83,7 @@ class InstallCommand extends Command
      * @param  string  $url The URL to check.
      * @return boolean
      */
-    function isValidUrl($url)
+    protected function isValidUrl($url)
     {
         $headers = get_headers($url);
         return stripos($headers[0], "200 OK");
