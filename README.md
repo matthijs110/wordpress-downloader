@@ -3,6 +3,7 @@
     <a href="https://packagist.org/packages/matthijs110/wordpress-downloader"><img src="https://poser.pugx.org/matthijs110/wordpress-downloader/v/stable.svg" alt="Latest Stable Version"></a>
     <a href="https://packagist.org/packages/matthijs110/wordpress-downloader"><img src="https://poser.pugx.org/matthijs110/wordpress-downloader/license.svg" alt="License"></a>
 </p>
+
 # WordPress Downloader (Console)
 Symfony console application that will grab a fresh [WordPress](https://wordpress.org/) installation.
 ```sh
